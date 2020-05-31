@@ -4,6 +4,7 @@ package pl.chmielewski.planowaniezajec.model;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -13,20 +14,21 @@ public class Activity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private String name;
-    //aktualnie string gdyz nie mam połączenia z api od personelu
     private String leader;
     private String activityType;
     private String date;
     private String hourStart;
     private String hourEnd;
-    private ArrayList<String> equipmentUsed;
 
-    private boolean classCanceled=false;
+    @OneToMany(mappedBy = "parent",cascade = CascadeType.ALL,orphanRemoval = true)
+    private List<Equipment> equipmentUsed=new ArrayList<>();
+
+    private boolean classCanceled;
 
     public Activity() {
     }
 
-    public Activity(String name, String leader, String activityType, String date, String hourStart, String hourEnd, ArrayList<String> equipmentUsed, boolean classCanceled) {
+    public Activity(String name, String leader, String activityType, String date, String hourStart, String hourEnd, List<Equipment> equipmentUsed, boolean classCanceled) {
         this.name = name;
         this.leader = leader;
         this.activityType = activityType;
@@ -85,11 +87,11 @@ public class Activity {
         this.hourEnd = hourEnd;
     }
 
-    public ArrayList<String> getEquipmentUsed() {
+    public List<Equipment> getEquipmentUsed() {
         return equipmentUsed;
     }
 
-    public void setEquipmentUsed(ArrayList<String> equipmentUsed) {
+    public void setEquipmentUsed(List<Equipment> equipmentUsed) {
         this.equipmentUsed = equipmentUsed;
     }
 
