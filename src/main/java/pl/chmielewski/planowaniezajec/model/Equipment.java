@@ -17,9 +17,7 @@ public class Equipment {
     private boolean broken;
     @NotNull
     private boolean availability;
-//    @ManyToOne
-//    @JoinColumn
-//private Activity parent;
+
     public Equipment() {
     }
 
