@@ -3,11 +3,11 @@ package pl.chmielewski.planowaniezajec.model;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
-@Entity
+@Embeddable
 
 public class Equipment {
 
-    @Id
+
     private Long ID;
     @NotNull
     private String equipmentName;
@@ -17,9 +17,9 @@ public class Equipment {
     private boolean broken;
     @NotNull
     private boolean availability;
-    @ManyToOne
-    @JoinColumn
-private Activity parent;
+//    @ManyToOne
+//    @JoinColumn
+//private Activity parent;
     public Equipment() {
     }
 

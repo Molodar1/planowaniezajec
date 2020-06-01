@@ -2,16 +2,20 @@ package pl.chmielewski.planowaniezajec.api;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.event.EventListener;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import pl.chmielewski.planowaniezajec.model.Activity;
 
+import pl.chmielewski.planowaniezajec.model.Classification;
 import pl.chmielewski.planowaniezajec.model.Equipment;
 import pl.chmielewski.planowaniezajec.repo.ActivityRepo;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -35,25 +39,45 @@ public class ActivityApi {
     @GetMapping("/getActivitiesByDate/{date}")
     public Iterable<Activity> getActivitiesByDate(@PathVariable String date){return activityRepo.getActivitiesByDate(date);}
 
+    @GetMapping("/getActivitiesById/{id}")
+    public Activity getActivitiesById(@PathVariable int id){return activityRepo.getActivityById(id);}
+
     @PutMapping("/updateActivity")
     public void updateActivity(@RequestBody Activity activity)
-    {activityRepo.updateActivity(
-            activity.getId(),
-            activity.getName(),
-            activity.getLeader(),
-            activity.getActivityType(),
-            activity.getDate(),
-            activity.getHourStart(),
-            activity.getHourEnd(),
-            activity.getEquipmentUsed(),
-            activity.isClassCanceled());
-        changeEquipmentAvailabilityToNotAvailable(activity.getEquipmentUsed());
+    {
+        if(activity.isClassCanceled()) {
+            activityRepo.updateActivity(
+                    activity.getId(),
+                    activity.getName(),
+                    activity.getLeader(),
+                    activity.getActivityType(),
+                    activity.getDate(),
+                    activity.getHourStart(),
+                    activity.getHourEnd(),
+                    activity.getEquipmentUsed(),
+                    activity.isClassCanceled());
+            changeEquipmentAvailabilityToAvailable(activity.getEquipmentUsed());
+        }
+        else
+            {
+                activityRepo.updateActivity(
+                        activity.getId(),
+                        activity.getName(),
+                        activity.getLeader(),
+                        activity.getActivityType(),
+                        activity.getDate(),
+                        activity.getHourStart(),
+                        activity.getHourEnd(),
+                        activity.getEquipmentUsed(),
+                        activity.isClassCanceled());
+                changeEquipmentAvailabilityToNotAvailable(activity.getEquipmentUsed());
+        }
 
 }
 @PostMapping("/addActivity")
     public void addActivity(@RequestBody Activity activity){
     activityRepo.save(activity);
-    changeEquipmentAvailabilityToAvailable(activity.getEquipmentUsed());
+    changeEquipmentAvailabilityToNotAvailable(activity.getEquipmentUsed());
 
 
 

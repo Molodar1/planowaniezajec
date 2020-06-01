@@ -20,8 +20,13 @@ public class Activity {
     private String hourStart;
     private String hourEnd;
 
-    @OneToMany(mappedBy = "parent",cascade = CascadeType.ALL,orphanRemoval = true)
-    private List<Equipment> equipmentUsed=new ArrayList<>();
+//    @OneToMany(mappedBy = "parent",cascade = CascadeType.ALL,orphanRemoval = true)
+//    private List<Equipment> equipmentUsed=new ArrayList<>();
+@ElementCollection
+@CollectionTable(
+        name="equipmentUsed",
+        joinColumns=@JoinColumn(name="ACTIVITY_ID"))
+private List<Equipment> equipmentUsed;
 
     private boolean classCanceled;
 
