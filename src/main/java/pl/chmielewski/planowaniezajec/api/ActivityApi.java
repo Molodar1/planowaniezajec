@@ -99,7 +99,7 @@ public void changeEquipmentAvailabilityToAvailable(List<Equipment> equipmentList
     HttpEntity httpEntity=new HttpEntity(equipmentList);
 
     restTemplate.exchange("https://justfitequipmentcatalog.herokuapp.com/justfit/equipment/changeAvailabilityList?availability=true",
-            HttpMethod.PUT,
+            HttpMethod.PATCH,
             httpEntity,
             Void.class);
 }
@@ -109,7 +109,7 @@ public void changeEquipmentAvailabilityToAvailable(List<Equipment> equipmentList
         HttpEntity httpEntity=new HttpEntity(equipmentList);
 
         restTemplate.exchange("https://justfitequipmentcatalog.herokuapp.com/justfit/equipment/changeAvailabilityList?availability=false",
-                HttpMethod.PUT,
+                HttpMethod.PATCH,
                 httpEntity,
                 Void.class);
     }
